@@ -8,13 +8,14 @@ if(!isset($_SESSION['userId'])){
 $grand_total = $_GET['grand_total'];
 if($_GET['couponApp'] === "yes"){
   $grand_total = ($grand_total * 0.9);
+  if($grand_total < 500){
+    $grand_total += 60;
+  }
 } 
 else{
   $grand_total = $_GET['full_payment'];
 }
-if($grand_total < 500){
-  $grand_total += 60;
-}
+
 $grand_total = round($grand_total,0);
 ?>
 

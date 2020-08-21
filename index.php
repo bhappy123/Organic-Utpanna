@@ -130,8 +130,8 @@
                 <label for="category">Choose Category</label>
                 <select class="browser-default custom-select" id="category">
                     <option selected value="all">Category</option>
-                    <option value="rice">rice</option>
-                    <option value="millets">millets</option>
+                    <option value="rice">Rice</option>
+                    <option value="millets">Millets</option>
                     <option value="cereals_and_flours">Cereals and Flours</option>
                     <option value="pulses_and_dals">Pulses and Dals</option>
                     <option value="spices_and_masala">Spices and Masala</option>

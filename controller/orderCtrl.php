@@ -1,5 +1,6 @@
 <?php 
 require 'db_config.php' ;
+
 if(isset($_POST['checkOutBtn']))
 {   
     if($_POST['hUserId']){
@@ -9,6 +10,7 @@ if(isset($_POST['checkOutBtn']))
         $c_email = $_POST['c_email'];
         $c_address = $_POST['c_address'];
         $c_zip = $_POST['c_zip'];
+        $shipping = 0;
         $payment_mode = "COD";
         $hCouponStatus = $_POST['hCouponStatus'];
         // Set Using Cart DB
@@ -18,10 +20,11 @@ if(isset($_POST['checkOutBtn']))
         date_default_timezone_set('Asia/Kolkata'); 
         $order_time =  date('h:i a m/d/Y', strtotime("now"));
         // Fetched Data From Cart
-        $sql = "SELECT CONCAT(`product_name`,'(', `quantity`,')') AS `ItemQty`,`product_price` FROM `cart` WHERE `user_id`='$hUserId'";
+        $sql = "SELECT CONCAT(`product_name`,'(', `quantity`,')') AS `ItemQty`,`product_price`,`product_name`,`quantity` FROM `cart` WHERE `user_id`='$hUserId'";
         $res = mysqli_query($conn, $sql);
        if(mysqli_num_rows($res)>0){
         $all_item_n_price = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        // print_r($all_item_n_price);
        foreach ($all_item_n_price as $all_price) {
 
     //Total Price of All Products i.e grand Price
@@ -31,7 +34,9 @@ if(isset($_POST['checkOutBtn']))
        if ($hCouponStatus === "yes") {
            $grand_price *= 0.9;
        }
+       $subtoatl = $grand_price;
        if($grand_price < 500){
+           $shipping = 60;
            $grand_price += 60;
        }
     //    All items in String Format
@@ -47,10 +52,123 @@ if(isset($_POST['checkOutBtn']))
 
        if($result_insert_data)
        {
+        
+        $sql_to_get_order_id = "SELECT `id` FROM `orders` WHERE `user_id` = '$hUserId' ORDER BY id DESC LIMIT 0, 1";
+        $order_id_querry = mysqli_query($conn, $sql_to_get_order_id);
+        $order_id = mysqli_fetch_all($order_id_querry, MYSQLI_ASSOC);
+        require_once('../PHPMailer/PHPMailerAutoload.php');
+
+
+        $mail = new PHPMailer;
+    
+        $mail->Host = "smtp.gmail.com"; 
+    
+        $mail->isSMTP();
+        $mail->Port = 587; 
+    
+        $mail->SMTPAuth = true;
+    
+        $mail->Username = "bikashranjandash0@gmail.com";
+    
+        $mail->Password = "bikash123";
+    
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        
+        $mail->isHTML(true);
+    
+        $mail->Subject = "Test Email";
+    
+        $mail->Body ='
+        <div style="padding: 15px; box-sizing: border-box; ">
+
+            <div style="border: 1px solid rgb(92, 92, 92); box-sizing: border-box; border-top: 4px solid limegreen; border-radius: 10px; padding: 12px; background: rgb(233, 248, 248);">
+                <h2>THANK YOU FOR YOUR ORDER FROM <span style="color: limegreen; margin-bottom: 10PX; font-weight: 700; margin-bottom: 10px;">ORGANIC UTPANNA</span></h2>
+                <P>Once your package ships we will send an email with a link to track your order. Your order summery is below. Thank you again for your business.</P>
+                <p><b>Order Questions?</b><br>Email <a href="mailto: support@organicutpanna.com">support@organicutpanna.com</a></p>
+            </div>
+            <div style="margin-top: 30px;">
+                <h3 style="text-align: center;">Order Details</h3>
+                <table style="width:100%; margin-top: 20PX; padding: 10px 0px; border: 2px solid rgb(39, 39, 39);">
+                    <tr style="padding: 10px 0px; background: rgb(230, 230, 230); color: rgb(0, 0, 0); font-weight: 600;">
+                      <th style="padding: 5px 8px;">Name</th>
+                      <th style="padding: 5px 8px;">'.$c_name.'</th>
+                    </tr>
+                    <tr style="background: rgb(236, 236, 236); ">
+                      <td style="padding: 5px 8px;">Email</td>
+                      <td style="padding: 5px 8px;">'.$c_email.'</td>
+                    </tr>
+                    <tr style="background: rgb(236, 236, 236); ">
+                      <td style="padding: 5px 8px;">Phone</td>
+                      <td style="padding: 5px 8px;">'.$c_phone.'</td>
+                    </tr>
+                    <tr style="background: rgb(236, 236, 236); ">
+                      <td style="padding: 5px 8px;">Address</td>
+                      <td style="padding: 5px 8px;">'.$c_address.'</td>
+                    </tr>
+                    <tr style="background: rgb(236, 236, 236); ">
+                      <td style="padding: 5px 8px;">Pin</td>
+                      <td style="padding: 5px 8px;">'.$c_zip.'</td>
+                    </tr>
+                    
+                  </table>
+            </div>
+            <div style="margin-top: 30px;">
+                <h3 style="text-align: center;">Order Id: '. $order_id[0]['id'] .'</h3>
+                <table style="width:100%; margin-top: 20PX; padding: 10px 0px; border: 2px solid black;">
+                    <tr style="padding: 10px 0px; background: rgb(31, 31, 31); color: white;">
+                      <th style="padding: 5px 8px;">Item</th>
+                      <th style="padding: 5px 8px;">Qty</th>
+                      <th style="padding: 5px 8px;">Price</th>
+                    </tr>';
+                    foreach ($all_item_n_price as $all_items) { 
+         $mail->Body .='<tr style="background: rgb(236, 236, 236); ">
+                        <td style="padding: 5px 8px;">'. $all_items['product_name'] .'</td>
+                        <td style="padding: 5px 8px;">'. $all_items['quantity'] .'</td>
+                        <td style="padding: 5px 8px;">'. $all_items['product_price'] .'</td>
+                      </tr>';
+                    }
+         $mail->Body .='
+                    <tr>
+                      <td style="padding: 5px 8px;"></td>
+                      <td style="padding: 5px 8px;">Sub Total</td>
+                      <td style="padding: 5px 8px;">'.$subtoatl.'</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 5px 8px;"></td>
+                      <td style="padding: 5px 8px;">Shipping</td>
+                      <td style="padding: 5px 8px;">'.$shipping.'</td>
+                    </tr>
+                    <tr style="color: rgb(190, 39, 39); font-weight: 600;">
+                      <td style="padding: 5px 8px;"></td>
+                      <td style="padding: 5px 8px;">Grand Total</td>
+                      <td style="padding: 5px 8px;">'.$grand_price.'</td>
+                    </tr>
+                  </table>
+            </div>
+        </div>
+';
+    
+        $mail->setFrom('bikashranjandash0@gmail.com','Bikash');
+    
+        $mail->addAddress($c_email);
+    
+    
+        if($mail->send()){
+            echo "mail sent";
+        }
+        else{
+            echo "err";
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+    
+
+
+
+
         //    echo '<script>alert("Order Successful")</script>';
           $sql_to_clear_cart= "DELETE FROM `cart` WHERE `user_id`='$hUserId'";
           $result_of_clear_cart = mysqli_query($conn, $sql_to_clear_cart);
-          header("Location: ../order-success.php");
+        header("Location: ../order-success.php");
        }
        else{
            echo '<script>alert("Order Unsuccessful")</script>';
