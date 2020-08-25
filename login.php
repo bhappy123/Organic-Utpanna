@@ -18,6 +18,9 @@ if(isset($_SESSION['userId'])){
           <input required type="password" name="password" placeholder="Password" autocomplete="off"><br>
           
           <button type="submit" name="loginSubmitBtn">Log In</button>
+          
+          <div class="bottom-links"><p>New User<a href="sign-up.php"> Sign Up</a></p></div>
+          <div class="bottom-links f-pass"><p class="text-center text-danger"><a href="forgot-password.php">Forgot Password</a></p></div>
         </form>
       </section>
     </main>

@@ -11,10 +11,7 @@ $(document).ready(function () {
 			},
 			url: "./controller/productCtrl.php",
 			success: function (response) {
-				console.log(category);
-				console.log(locationFilter);
 				let productsArr = JSON.parse(response);
-				console.log(productsArr);
 				let htmlString = ``;
 				productsArr.forEach((product) => {
 					htmlString += `
@@ -34,7 +31,7 @@ $(document).ready(function () {
 									<input type="hidden" class="pimage" value="./img/${product.item_image}">
 									<input type="hidden" class="pprice" value="${product.price}">
 									<input type="hidden" class="psize" value="${product.size}">
-									<div class="col-md-8 float-right"><button class="add-to-cart">Add To Cart</button></div>
+									<div class="col-md-8 float-right"><button class="cart-btn ${product.availability === 'yes' || product.availability ==='' ? 'add-to-cart' : ''}">${product.availability === 'yes' || product.availability ==='' ? 'Add To Cart' : 'Out Of Stock'}</button></div>
 									</div>
 								</div>
 							</div>
@@ -65,7 +62,7 @@ $(document).ready(function () {
 								console.log(response);
 								if (response === "login first") {
 									window.location.href =
-									"http://farmerspure.com/utpanna-online/login.php?error=Log In to use cart";
+									"http://organicutpanna.in/login.php?error=Log In to use cart";
 								}
 								else if(response === "Item Added Successfully")
 								$("#cart-message").html(
@@ -112,7 +109,7 @@ $(document).ready(function () {
 				
 				if (response === "login first") {
 					window.location.href =
-					"http://farmerspure.com/utpanna-online/login.php?error=Log In to use cart";
+					"http://organicutpanna.in/login.php?error=Log In to use cart";
 				}
 				else if(response === "Item Added Successfully")
 				{
@@ -196,10 +193,10 @@ $(document).ready(function () {
 	location.href==="http://localhost/Organic-Utpanna/index.php" ||
 	location.href==="http://localhost/Organic-Utpanna/index.php#" ||
 	location.href==="http://localhost/Organic-Utpanna/#" ||
-	location.href==="http://farmerspure.com/utpanna-online/" ||
-	location.href==="http://farmerspure.com/utpanna-online/index.php"||
-	location.href==="http://farmerspure.com/utpanna-online/#"||
-	location.href==="http://farmerspure.com/utpanna-online/index.php#"
+	location.href==="http://organicutpanna.in/" ||
+	location.href==="http://organicutpanna.in/index.php"||
+	location.href==="http://organicutpanna.in/#"||
+	location.href==="http://organicutpanna.in/index.php#"
 	) {    
   filter();
 }
@@ -268,14 +265,5 @@ $('#coupon').change(function (e) {
 			$("searchResultContainer").html('Type something');
 		}
 	});
-
-
-
-
-
-
-
-
-
 
 });

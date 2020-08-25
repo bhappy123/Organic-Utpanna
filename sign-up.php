@@ -1,7 +1,6 @@
 
 
 <?php include('./views/header.php') ?>
-
 <?php 
 if(isset($_SESSION['userId'])){
   header("Location: index.php");
@@ -24,9 +23,9 @@ if(isset($_SESSION['userId'])){
           <label for="cpassword">Confirm Password</label><br>
           <input type="password" name="cpassword" placeholder="Confirm Password" autocomplete="off"><br>
           <button type="submit" name="signUpSubmitBtn">Sign Up</button>
+          <div class="bottom-links"><p>Already Have Account<a href="login.php"> Log In</a></p></div>
+          <div class="bottom-links f-pass"><p class="text-center text-danger"><a href="forgot-password.php">Forgot Password</a></p></div>
         </form>
       </section>
     </main>
-
-
     <?php include('./views/footer.php') ?>

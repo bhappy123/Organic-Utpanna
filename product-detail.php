@@ -14,14 +14,14 @@
                 <h5>Size: <?php echo $viewProduct[0]['size'] ?></h5>
                 <h1><?php echo $viewProduct[0]['price'] ?>/-</h1>
                 <h3>How To Use</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Exercitationem maiores sed id, facilis quae temporibus quaerat in amet tempore aut sunt vitae, obcaecati similique? Deserunt aliquam dicta iusto blanditiis consequuntur.</p>
+                <p><?php echo $viewProduct[0]['product_use'] ?></p>
                 <div class="add-to-cart-form">
                     <input type="hidden" class="pid" value="<?php echo $viewProduct[0]['id'] ?>">
                     <input type="hidden" class="pname" value="<?php echo $viewProduct[0]['item_name'] ?>">
                     <input type="hidden" class="pimage" value="./img/<?php echo $viewProduct[0]['item_image'] ?>">
                     <input type="hidden" class="pprice" value="<?php echo $viewProduct[0]['price'] ?>">
                     <input type="hidden" class="psize" value="<?php echo $viewProduct[0]['size'] ?>">
-                    <button  class="add-to-cart">Add To Cart</button>
+                    <button  class="cart-btn <?php echo $viewProduct[0]['availability'] === 'yes' || $viewProduct[0]['availability'] === '' ? 'add-to-cart' : '' ?> "><?php echo $viewProduct[0]['availability'] === 'yes' || $viewProduct[0]['availability'] === '' ? 'Add To Cart' : 'Out Of Stock' ?></button>
                 </div>
             </div>
             <div class="heart">

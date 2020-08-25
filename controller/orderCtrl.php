@@ -43,7 +43,6 @@ if(isset($_POST['checkOutBtn']))
        $all_ordered_items = implode(", ", $order_items);
     //    echo $all_ordered_items;
     //    echo $grand_price;
-
     //    Insert Into Order Table
        $grand_price = round($grand_price,0);
        $sql_to_insert_order_data = "INSERT INTO `orders`(`name`, `email`, `zip_code`, `address`, `phone`, `payment_mode`, `products`, `order_time`, `user_id`,`order_status`,`payment`) 
@@ -63,7 +62,7 @@ if(isset($_POST['checkOutBtn']))
     
         $mail->Host = "smtp.gmail.com"; 
     
-        $mail->isSMTP();
+        // $mail->isSMTP();
         $mail->Port = 587; 
     
         $mail->SMTPAuth = true;
@@ -82,6 +81,7 @@ if(isset($_POST['checkOutBtn']))
         <div style="padding: 15px; box-sizing: border-box; ">
 
             <div style="border: 1px solid rgb(92, 92, 92); box-sizing: border-box; border-top: 4px solid limegreen; border-radius: 10px; padding: 12px; background: rgb(233, 248, 248);">
+                <img src="../assests/img/logo.png" width="250px" alt="">
                 <h2>THANK YOU FOR YOUR ORDER FROM <span style="color: limegreen; margin-bottom: 10PX; font-weight: 700; margin-bottom: 10px;">ORGANIC UTPANNA</span></h2>
                 <P>Once your package ships we will send an email with a link to track your order. Your order summery is below. Thank you again for your business.</P>
                 <p><b>Order Questions?</b><br>Email <a href="mailto: support@organicutpanna.com">support@organicutpanna.com</a></p>
@@ -153,15 +153,37 @@ if(isset($_POST['checkOutBtn']))
         $mail->addAddress($c_email);
     
     
-        if($mail->send()){
-            echo "mail sent";
-        }
-        else{
+        if(!$mail->send()){
             echo "err";
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         }
     
+        // SMS Integration
 
+    //     if(strlen((string)$c_phone)===10) {    
+    //     $textMessage="Order Placed: Your Order With Order Id #".$order_id[0]['id']." is Successful.";
+    //     $mobileNumber=$c_phone;
+
+    //     $apiKey = urlencode('OqCZYS4YHXI-RLNWp4Zj9ntCksrYNsuuWOQPIky9Z5');
+        
+    //     // Message details
+    //     $numbers = array($mobileNumber);
+    //     $sender = urlencode('TXTLCL');
+    //     $message = rawurlencode($textMessage);
+
+    //     $numbers = implode(',', $numbers);
+
+    //     // Prepare data for POST request
+    //     $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+
+    //     // Send the POST request with cURL
+    //     $ch = curl_init('https://api.textlocal.in/send/');
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     $response = curl_exec($ch);
+    //     curl_close($ch);   
+    // }   
 
 
 

@@ -149,7 +149,7 @@ echo '<h1 id="selected_category">'.$selected_category.'</h1>' ;
 									<input type="hidden" class="pimage" value="./img/<?php echo $product['item_image'] ?>">
 									<input type="hidden" class="pprice" value="<?php echo $product['price'] ?>">
 									<input type="hidden" class="psize" value="<?php echo $product['size'] ?>">
-									<div class="col-md-8 float-right"><button class="add-to-cart">Add To Cart</button></div>
+									<div class="col-md-8 float-right"><button  class="cart-btn <?php echo $product['availability'] === 'yes' || $product['availability'] === '' ? 'add-to-cart' : '' ?> "><?php echo $product['availability'] === 'yes' || $product['availability'] === '' ? 'Add To Cart' : 'Out Of Stock' ?></button></div>
 									</div>
 								</div>
 							</div>

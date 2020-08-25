@@ -41,7 +41,7 @@
                             <td><input class="form-control pQuantity" min="1" type="number" value="<?php echo $cart_item['quantity']  ?>" /></td>
                             <td class="text-right"><a href="./controller/cartCtrl.php?deleteFromCart=<?php echo $cart_item['id'] ?>&userId=<?php echo $cart_item['user_id'] ?>" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a> </td>
                             <?php  $grand_total += $cart_item['product_price']  ?>
-                            <?php  $shipping =  $grand_total < 499 ? 60 : 0  ?>
+                            <?php  $shipping =  $grand_total < 500 ? 60 : 0  ?>
                         </tr>
                         <?php }  ?>
                         

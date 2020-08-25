@@ -1,6 +1,5 @@
 <?php include('./views/header.php')  ?>
 <?php include('./controller/orderCtrl.php')  ?>
-
 <div class="previous-orders">
     <h1>My Orders</h1>
 <div class="table-responsive" id="sailorTableArea">
@@ -31,7 +30,7 @@
                 <td><?php echo  $order_data['zip_code']  ?></td>
                 <td><?php echo  $order_data['payment']  ?></td>
                 <td><?php echo  $order_data['order_status']  ?></td>
-                <td><a href="track-order.php?order=<?php echo  $order_data['id']?>&status=<?php echo $order_data['order_status'] ?>" class="btn btn-success">Track Order</a>  </td>
+                <td><a href="track-order.php?order=<?php echo  $order_data['id']?>&status=<?php echo $order_data['order_status'] ?>&dispatchMsg=<?php echo $order_data['dispatched_msg'] ?>&shippedMsg=<?php echo $order_data['shipped_msg'] ?>&deliveryMsg=<?php echo $order_data['delivery_msg'] ?>" class="btn btn-success">Track Order</a>  </td>
                 <form action="./order-cancel.php" method="post">
                     <input type="hidden" name="orderID" value="<?php   ?>">
                     <td><button type="submit" class="btn btn-danger btn-xs" >Cancel</button></td>

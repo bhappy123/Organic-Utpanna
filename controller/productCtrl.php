@@ -7,7 +7,7 @@ $_SESSION['global_location'] = $_REQUEST['locationFilter'];
 $locationFilter = $_SESSION['global_location'];
 
 if ($category === "all" && $locationFilter==="All") {
-    $sql = "SELECT * FROM `product` ";
+    $sql = "SELECT * FROM `product` LIMIT 40 ";
 }
 else if ($category === "all") {
     $sql = "SELECT * FROM `product` WHERE ".$locationFilter."='yes' ";
