@@ -482,7 +482,7 @@ ul.drop-down-nav li a {
   vertical-align: middle;
   display: inline-block;
 }
-.product-grid4 .cart-btn {
+.product-grid4 .add-to-cart {
   border: 1px solid #e5e5e5;
   display: inline-block;
   padding: 10px 20px;
@@ -492,12 +492,12 @@ ul.drop-down-nav li a {
   border-radius: 4px;
   transition: all 0.3s;
 }
-.product-grid4:hover .cart-btn {
+.product-grid4:hover .add-to-cart {
   border: 1px solid transparent;
   background: var(--prim);
   color: #fff;
 }
-.product-grid4 .cart-btn:hover {
+.product-grid4 .add-to-cart:hover {
   background-color: #505050;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -826,7 +826,7 @@ ul.drop-down-nav li a {
   outline: none;
   display: block;
   margin: auto;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   text-transform: uppercase;
   font-size: 1.6rem;
   font-weight: 900;
@@ -1417,7 +1417,7 @@ svg{
     opacity: 1;
     background: black;
     color: white;
-    z-index: 20000000000000000000000000;
+    z-index: 200000000000000000;
   }
   .product-filter{
     position: fixed;
@@ -1896,7 +1896,7 @@ width: 100%; }
   display: inline-block;
   border-radius: 35px;
   position: absolute;
-  z-index: 200000000;
+  z-index: 120000000000000000000000000;
   left: 6%;
   width: 88%;
   top: 15%;
@@ -1934,11 +1934,11 @@ width: 100%; }
 .search-result-container{
   width: 90%;
   position: absolute;
-  top: 22%;
+  top: 27%;
   left: 5%;
   background: white;
   border-radius: 20px;
-  z-index: 20000000000;
+  z-index: 220000000000000000000000000;
   transition: 0.3s ease-in;
 
 }

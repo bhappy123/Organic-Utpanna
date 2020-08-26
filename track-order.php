@@ -8,8 +8,8 @@ echo '<h2 id="statusRes" class="d-none">'.$status.'</h2>'
 <h2 class="text-center order-status-head">Order Status</h2>
         <ul>
             <li id="0" >Initiated <span>Order Initiated Successfully</span></li>
-            <li id="1" >Dispatched <span><?php echo $_GET['shippedMsg'] === "" ? "" : $_GET['shippedMsg'] ?></span></li>
-            <li id="2" >Shipped <span><?php echo $_GET['dispatchMsg'] === "" ? "" : $_GET['dispatchMsg'] ?></span></li>
+            <li id="1" >Dispatched <span><?php echo $_GET['dispatchMsg'] === "" ? "" : $_GET['dispatchMsg'] ?></span></li>
+            <li id="2" >Shipped <span><?php echo $_GET['shippedMsg'] === "" ? "" : $_GET['shippedMsg'] ?></span></li>
             <li id="3">Delivery <span><?php echo $_GET['deliveryMsg'] === "" ? "" : $_GET['deliveryMsg'] ?></span></li>
         </ul>
 </section>

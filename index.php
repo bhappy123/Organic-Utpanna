@@ -91,7 +91,7 @@
                             <a href="category.php?category=seeds_and_dry_fruits"><img src="./category-icon/10.png" alt=""></a>
                         </div>
                         <div class="category-text">
-                            <p>Seeds & Dry Fruits</p>
+                            <p>Seeds & Super Foods</p>
                         </div>
                     </div>
                     <div class="each-category">
@@ -139,7 +139,7 @@
                     <option value="salt">Salt</option>
                     <option value="oils_and_ghee">Oils and Ghee</option>
                     <option value="nuts_and_dry_fruits">Nuts and Dry Fruits</option>
-                    <option value="seeds_and_dry_fruits">Seeds And Dry Fruits</option>
+                    <option value="seeds_and_dry_fruits">Seeds And Super Foods</option>
                     <option value="herbs">Herbs</option>
                     <option value="personal_care">Personal Care</option>
                     <option value="ready_to_eat">Ready To Eat</option>

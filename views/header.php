@@ -64,7 +64,7 @@ require "./controller/cartItems.php"
                         <li><a href="category.php?category=salt">Salt 🧂</a></li>
                         <li><a href="category.php?category=oils_and_ghee">Oils & Ghee 🧴</a></li>
                         <li><a href="category.php?category=nuts_and_dry_fruits">Nuts & Dry Fruits 🍇</a></li>
-                        <li><a href="category.php?category=seeds_and_dry_fruits">Seeds & Dry Fruits 🌱</a></li>
+                        <li><a href="category.php?category=seeds_and_dry_fruits">Seeds & Super Foods 🌱</a></li>
                         <li><a href="category.php?category=herbs">Herbs ☘️</a></li>
                         <li><a href="category.php?category=personal_care">Personal Care 🧼</a></li>
                         <li><a href="category.php?category=ready_to_eat">Ready To Eat 🍜</a></li>

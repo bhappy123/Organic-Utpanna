@@ -31,10 +31,14 @@
                 <td><?php echo  $order_data['payment']  ?></td>
                 <td><?php echo  $order_data['order_status']  ?></td>
                 <td><a href="track-order.php?order=<?php echo  $order_data['id']?>&status=<?php echo $order_data['order_status'] ?>&dispatchMsg=<?php echo $order_data['dispatched_msg'] ?>&shippedMsg=<?php echo $order_data['shipped_msg'] ?>&deliveryMsg=<?php echo $order_data['delivery_msg'] ?>" class="btn btn-success">Track Order</a>  </td>
+                <?php if($order_data['order_status'] != "Dispatched" && $order_data['order_status'] != "Shipped" &&  $order_data['order_status'] != "Delivery"){ ?>
                 <form action="./order-cancel.php" method="post">
-                    <input type="hidden" name="orderID" value="<?php   ?>">
-                    <td><button type="submit" class="btn btn-danger btn-xs" >Cancel</button></td>
+                    <input type="hidden" name="orderID" value="<?php echo $order_data['id']  ?>">
+                    <td><button type="submit" class="btn btn-danger btn-xs <?php echo $order_data['order_status'] === 'Cancelation Initiated' ? 'd-none' : '' ?>" >Cancel</button></td>
                 </form>
+                <?php } else {?>
+                    <td><a class="btn btn-warning" href="order-querry.php?status=<?php echo  $order_data['order_status'] ?>">Contact Us</a></td>
+                <?php } ?>
             </tr>
                <?php }  ?>
         </tbody>

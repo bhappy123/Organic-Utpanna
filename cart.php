@@ -77,15 +77,20 @@
         </div>
         <div class="col mb-2">
             <div class="row">
-                <div class="col-sm-12 col-md-6 text-right">
-                    <a href="./index.php" class="btn btn-lg btn-block btn-outline-success text-uppercase">Continue Shopping</a>
-                </div>
-                <div class="col-sm-12 col-md-6 mb-sm-3 text-right">
+            <div class="col-sm-12 col-md-6 mb-sm-3 text-right">
                     <form action="./checkout.php" method="get">
                     <input type="hidden" name="couponApp" id="couponApp" value="no" ?>
                     <input type="hidden" name="full_payment" value="<?php echo $full_payment ?>">
                     <input type="hidden" name="grand_total" value="<?php echo $grand_total ?>">
-                    <button type="submit" class="btn btn-lg btn-block btn-success text-uppercase">Checkout</button>
+                    <button type="submit" class="btn btn-lg btn-block btn-success text-uppercase">Cash On Delivery</button>
+                    </form>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                <form action="./online-checkout.php" method="get">
+                    <input type="hidden" name="couponApp" id="couponOnlineApp" value="no" ?>
+                    <input type="hidden" name="full_payment" value="<?php echo $full_payment ?>">
+                    <input type="hidden" name="grand_total" value="<?php echo $grand_total ?>">
+                    <button type="submit" class="btn btn-lg btn-block btn-outline-success text-uppercase">Pay Online</button>
                     </form>
                 </div>
             </div>

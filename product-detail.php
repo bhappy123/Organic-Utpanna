@@ -1,5 +1,8 @@
 <?php include('./views/header.php') ?>
-<?php include('./controller/singleDetailCtrl.php') ?>
+<?php include('./controller/singleDetailCtrl.php');
+$locationFilter = $_SESSION['global_location'];
+                  $location_stock =$locationFilter.'_stock';
+                    ?>
 <div id="cart-message"></div>
 <section class="single-product-details">
         <div class="container product-detail">
@@ -21,7 +24,8 @@
                     <input type="hidden" class="pimage" value="./img/<?php echo $viewProduct[0]['item_image'] ?>">
                     <input type="hidden" class="pprice" value="<?php echo $viewProduct[0]['price'] ?>">
                     <input type="hidden" class="psize" value="<?php echo $viewProduct[0]['size'] ?>">
-                    <button  class="cart-btn <?php echo $viewProduct[0]['availability'] === 'yes' || $viewProduct[0]['availability'] === '' ? 'add-to-cart' : '' ?> "><?php echo $viewProduct[0]['availability'] === 'yes' || $viewProduct[0]['availability'] === '' ? 'Add To Cart' : 'Out Of Stock' ?></button>
+                    <button  class="cart-btn <?php echo $viewProduct[0][$location_stock] > 5  ? 'add-to-cart' : '' ?> "><?php echo $viewProduct[0][$location_stock] > 5 ? 'Add To Cart' : 'Out Of Stock' ?></button>
+
                 </div>
             </div>
             <div class="heart">

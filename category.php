@@ -87,7 +87,7 @@ echo '<h1 id="selected_category">'.$selected_category.'</h1>' ;
                             <a href="category.php?category=seeds_and_dry_fruits"><img src="./category-icon/10.png" alt=""></a>
                         </div>
                         <div class="category-text">
-                            <p>Seeds & Dry Fruits</p>
+                            <p>Seeds & Super Foods</p>
                         </div>
                     </div>
                     <div class="each-category" data-category="herbs">
@@ -130,7 +130,10 @@ echo '<h1 id="selected_category">'.$selected_category.'</h1>' ;
 <section class="product-card-section">
         <div class="container">
             <div class="row product-card-justify" id="allProduct">
-			<!-- Php Code  -->
+            <!-- Php Code  -->
+            <?php $locationFilter = $_SESSION['global_location'];
+                    $location_stock =$locationFilter.'_stock';
+            ?>
 			<?php foreach ($products as $product) {  ?>
 				<div id="cart-message"></div>
             <div class="col-md-3 each-product-outside">
@@ -139,7 +142,8 @@ echo '<h1 id="selected_category">'.$selected_category.'</h1>' ;
 							<a href="product-detail.php?product=<?php echo $product['id']  ?>">	<img src="./img/<?php echo $product['item_image'] ?>" alt=""></a>
 							</div>
 							<div class="each-product-content">
-							<a href="product-detail.php?product=<?php echo $product['id']  ?>"><h2><?php echo $product['item_name'] ?></h2></a>
+                            <a href="product-detail.php?product=<?php echo $product['id']  ?>"><h2><?php echo $product['item_name'] ?></h2></a>
+                            <p><?php echo $product[$location_stock] < 5 ?></p>
 								<h6><?php echo $product['size'] ?></h6>
 								<div class="row">
 									<div class="col-md-4"><h4><?php echo $product['price'] ?>/-</h4></div>
@@ -149,7 +153,8 @@ echo '<h1 id="selected_category">'.$selected_category.'</h1>' ;
 									<input type="hidden" class="pimage" value="./img/<?php echo $product['item_image'] ?>">
 									<input type="hidden" class="pprice" value="<?php echo $product['price'] ?>">
 									<input type="hidden" class="psize" value="<?php echo $product['size'] ?>">
-									<div class="col-md-8 float-right"><button  class="cart-btn <?php echo $product['availability'] === 'yes' || $product['availability'] === '' ? 'add-to-cart' : '' ?> "><?php echo $product['availability'] === 'yes' || $product['availability'] === '' ? 'Add To Cart' : 'Out Of Stock' ?></button></div>
+									<div class="col-md-8 float-right"><button  class="cart-btn <?php echo $product[$location_stock] > 5  ? 'add-to-cart' : '' ?> "><?php echo $product[$location_stock] > 5 ? 'Add To Cart' : 'Out Of Stock' ?></button></div>
+
 									</div>
 								</div>
 							</div>

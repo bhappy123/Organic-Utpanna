@@ -1,10 +1,11 @@
 <?php 
 require 'db_config.php' ;
-
 if(isset($_POST['checkOutBtn']))
 {   
     if($_POST['hUserId']){
         $hUserId = $_POST['hUserId'];
+        session_start();
+        $location_filter = $_SESSION['global_location'];
         $c_name = $_POST['c_name'];
         $c_phone = $_POST['c_phone'];
         $c_email = $_POST['c_email'];
@@ -20,7 +21,7 @@ if(isset($_POST['checkOutBtn']))
         date_default_timezone_set('Asia/Kolkata'); 
         $order_time =  date('h:i a m/d/Y', strtotime("now"));
         // Fetched Data From Cart
-        $sql = "SELECT CONCAT(`product_name`,'(', `quantity`,')') AS `ItemQty`,`product_price`,`product_name`,`quantity` FROM `cart` WHERE `user_id`='$hUserId'";
+        $sql = "SELECT CONCAT(`product_name`,'(', `quantity`,')') AS `ItemQty`,`product_price`,`product_name`,`quantity`,`product_id` FROM `cart` WHERE `user_id`='$hUserId'";
         $res = mysqli_query($conn, $sql);
        if(mysqli_num_rows($res)>0){
         $all_item_n_price = mysqli_fetch_all($res, MYSQLI_ASSOC);
@@ -45,90 +46,88 @@ if(isset($_POST['checkOutBtn']))
     //    echo $grand_price;
     //    Insert Into Order Table
        $grand_price = round($grand_price,0);
-       $sql_to_insert_order_data = "INSERT INTO `orders`(`name`, `email`, `zip_code`, `address`, `phone`, `payment_mode`, `products`, `order_time`, `user_id`,`order_status`,`payment`) 
-                                    VALUES ('$c_name','$c_email','$c_zip','$c_address','$c_phone','$payment_mode','$all_ordered_items','$order_time','$hUserId','$order_status', '$grand_price')";
+       $sql_to_insert_order_data = "INSERT INTO `orders`(`name`, `email`, `zip_code`, `address`, `phone`, `payment_mode`, `products`, `order_time`, `user_id`,`order_status`,`payment`,`location_filter`) 
+                                    VALUES ('$c_name','$c_email','$c_zip','$c_address','$c_phone','$payment_mode','$all_ordered_items','$order_time','$hUserId','$order_status', '$grand_price','$location_filter')";
        $result_insert_data = mysqli_query($conn, $sql_to_insert_order_data);
 
        if($result_insert_data)
        {
-        
+        echo $location_filter;
         $sql_to_get_order_id = "SELECT `id` FROM `orders` WHERE `user_id` = '$hUserId' ORDER BY id DESC LIMIT 0, 1";
         $order_id_querry = mysqli_query($conn, $sql_to_get_order_id);
         $order_id = mysqli_fetch_all($order_id_querry, MYSQLI_ASSOC);
-        require_once('../PHPMailer/PHPMailerAutoload.php');
 
-
-        $mail = new PHPMailer;
-    
-        $mail->Host = "smtp.gmail.com"; 
-    
-        // $mail->isSMTP();
-        $mail->Port = 587; 
-    
-        $mail->SMTPAuth = true;
-    
-        $mail->Username = "bikashranjandash0@gmail.com";
-    
-        $mail->Password = "bikash123";
-    
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        // Insert Into Inventory DB
+        foreach ($all_item_n_price as $all_order_items) {
+          $inventory_order_id = $order_id[0]['id'];
+          $inventory_item_id = $all_order_items['product_id'];
+          $inventory_item_qty = $all_order_items['quantity'];
+          $sql_to_insert_in_inventory = "INSERT INTO `inventory_management`(`order_id`, `product_id`, `product_quantity`) VALUES ('$inventory_order_id','$inventory_item_id','$inventory_item_qty')";
+          $insert_to_inventory = mysqli_query($conn, $sql_to_insert_in_inventory);
+        }
         
-        $mail->isHTML(true);
+    $to = $c_email;
+    $subject = 'Order Successful';
+    $from = 'orders@organicutpanna.in';
+        
+        
+        
+    // To send HTML mail, the Content-type header must be set
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     
-        $mail->Subject = "Test Email";
     
-        $mail->Body ='
-        <div style="padding: 15px; box-sizing: border-box; ">
-
-            <div style="border: 1px solid rgb(92, 92, 92); box-sizing: border-box; border-top: 4px solid limegreen; border-radius: 10px; padding: 12px; background: rgb(233, 248, 248);">
-                <img src="../assests/img/logo.png" width="250px" alt="">
-                <h2>THANK YOU FOR YOUR ORDER FROM <span style="color: limegreen; margin-bottom: 10PX; font-weight: 700; margin-bottom: 10px;">ORGANIC UTPANNA</span></h2>
-                <P>Once your package ships we will send an email with a link to track your order. Your order summery is below. Thank you again for your business.</P>
-                <p><b>Order Questions?</b><br>Email <a href="mailto: support@organicutpanna.com">support@organicutpanna.com</a></p>
+    // Create email headers
+    $headers .= 'From: '.$from."\r\n".
+        'Reply-To: '.$from."\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+    
+    // Compose a simple HTML email message
+    $message = '<html><body>';
+    $message .= '<div style="border: 1px solid rgb(92, 92, 92); box-sizing: border-box; border-top: 4px solid limegreen; border-radius: 10px; padding: 12px; background: rgb(233, 248, 248);">
+                <img style="width:200px;" src="https://organicutpanna.in/assests/img/logo.png" alt="logo"/>
+                <h2>THANK YOU FOR YOUR ORDER FROM <span style="color: limegreen; margin-bottom: 10px; font-weight: 700; margin-bottom: 10px;">ORGANIC UTPANNA</span></h2>
+                <p>For Any Order Related Query: <a href="mailto:orders.farmerspure@gmail.com">orders.farmerspure@gmail.com</a></p>
             </div>
             <div style="margin-top: 30px;">
                 <h3 style="text-align: center;">Order Details</h3>
-                <table style="width:100%; margin-top: 20PX; padding: 10px 0px; border: 2px solid rgb(39, 39, 39);">
+                    <table style="width:100%; margin-top: 20PX; padding: 10px 0px; border: 2px solid rgb(39, 39, 39);">
                     <tr style="padding: 10px 0px; background: rgb(230, 230, 230); color: rgb(0, 0, 0); font-weight: 600;">
                       <th style="padding: 5px 8px;">Name</th>
                       <th style="padding: 5px 8px;">'.$c_name.'</th>
                     </tr>
-                    <tr style="background: rgb(236, 236, 236); ">
+                    <tr style="background: rgb(236, 236, 236);">
                       <td style="padding: 5px 8px;">Email</td>
                       <td style="padding: 5px 8px;">'.$c_email.'</td>
                     </tr>
-                    <tr style="background: rgb(236, 236, 236); ">
+                    <tr style="background: rgb(236, 236, 236);">
                       <td style="padding: 5px 8px;">Phone</td>
                       <td style="padding: 5px 8px;">'.$c_phone.'</td>
                     </tr>
-                    <tr style="background: rgb(236, 236, 236); ">
+                    <tr style="background: rgb(236, 236, 236);">
                       <td style="padding: 5px 8px;">Address</td>
                       <td style="padding: 5px 8px;">'.$c_address.'</td>
                     </tr>
                     <tr style="background: rgb(236, 236, 236); ">
                       <td style="padding: 5px 8px;">Pin</td>
                       <td style="padding: 5px 8px;">'.$c_zip.'</td>
-                    </tr>
-                    
                   </table>
-            </div>
             <div style="margin-top: 30px;">
-                <h3 style="text-align: center;">Order Id: '. $order_id[0]['id'] .'</h3>
+                <h3 style="text-align: center;">Order Id:'.$order_id[0]['id'].'</h3>
                 <table style="width:100%; margin-top: 20PX; padding: 10px 0px; border: 2px solid black;">
                     <tr style="padding: 10px 0px; background: rgb(31, 31, 31); color: white;">
                       <th style="padding: 5px 8px;">Item</th>
                       <th style="padding: 5px 8px;">Qty</th>
                       <th style="padding: 5px 8px;">Price</th>
                     </tr>';
-                    foreach ($all_item_n_price as $all_items) { 
-         $mail->Body .='<tr style="background: rgb(236, 236, 236); ">
-                        <td style="padding: 5px 8px;">'. $all_items['product_name'] .'</td>
-                        <td style="padding: 5px 8px;">'. $all_items['quantity'] .'</td>
-                        <td style="padding: 5px 8px;">'. $all_items['product_price'] .'</td>
+    foreach ($all_item_n_price as $all_items) { 
+    $message .= '<tr style="background: rgb(236, 236, 236); ">
+                        <td style="padding: 5px 8px;">'.$all_items['product_name'] .'</td>
+                        <td style="padding: 5px 8px;">'.$all_items['quantity'] .'</td>
+                        <td style="padding: 5px 8px;">'.$all_items['product_price'] .'</td>
                       </tr>';
-                    }
-         $mail->Body .='
-                    <tr>
+    }
+    $message .= '<tr>
                       <td style="padding: 5px 8px;"></td>
                       <td style="padding: 5px 8px;">Sub Total</td>
                       <td style="padding: 5px 8px;">'.$subtoatl.'</td>
@@ -144,46 +143,37 @@ if(isset($_POST['checkOutBtn']))
                       <td style="padding: 5px 8px;">'.$grand_price.'</td>
                     </tr>
                   </table>
-            </div>
-        </div>
-';
+            </div>';
+    $message .= '</body></html>';
     
-        $mail->setFrom('bikashranjandash0@gmail.com','Bikash');
+    mail($to, $subject, $message, $headers);
     
-        $mail->addAddress($c_email);
-    
-    
-        if(!$mail->send()){
-            echo "err";
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        }
-    
-        // SMS Integration
+    // SMS Integration
 
-    //     if(strlen((string)$c_phone)===10) {    
-    //     $textMessage="Order Placed: Your Order With Order Id #".$order_id[0]['id']." is Successful.";
-    //     $mobileNumber=$c_phone;
+        if(strlen((string)$c_phone)===10) {    
+        $textMessage="Order Placed: Thanks For Shopping With Organic Utpanna. Your Order With Order Id #".$order_id[0]['id']." is Successful.";
+        $mobileNumber=$c_phone;
 
-    //     $apiKey = urlencode('OqCZYS4YHXI-RLNWp4Zj9ntCksrYNsuuWOQPIky9Z5');
+        $apiKey = urlencode('OqCZYS4YHXI-RLNWp4Zj9ntCksrYNsuuWOQPIky9Z5');
         
-    //     // Message details
-    //     $numbers = array($mobileNumber);
-    //     $sender = urlencode('TXTLCL');
-    //     $message = rawurlencode($textMessage);
+        // Message details
+        $numbers = array($mobileNumber);
+        $sender = urlencode('TXTLCL');
+        $message = rawurlencode($textMessage);
 
-    //     $numbers = implode(',', $numbers);
+        $numbers = implode(',', $numbers);
 
-    //     // Prepare data for POST request
-    //     $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
+        // Prepare data for POST request
+        $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
 
-    //     // Send the POST request with cURL
-    //     $ch = curl_init('https://api.textlocal.in/send/');
-    //     curl_setopt($ch, CURLOPT_POST, true);
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     $response = curl_exec($ch);
-    //     curl_close($ch);   
-    // }   
+        // Send the POST request with cURL
+        $ch = curl_init('https://api.textlocal.in/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);   
+    }   
 
 
 

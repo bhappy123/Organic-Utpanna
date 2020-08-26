@@ -40,3 +40,36 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>
+
+
+<script>
+  success: function (response) {
+				let productsArr = JSON.parse(response);
+				let htmlString = ``;
+				let locationStock = locationFilter + '_stock';
+				productsArr.forEach((product) => {
+					htmlString += `
+					<div class="col-md-3 each-product-outside">
+						<div class="each-product-inside">
+							<div class="each-product-img">
+							<a href="product-detail.php?product=${product.id}">	<img src="./img/${product.item_image}" alt=""></a>
+							</div>
+							<div class="each-product-content">
+							<a href="product-detail.php?product=${product.id}"><h2>${product.item_name}</h2></a>
+								<h6>${product.size}</h6>
+								<div class="row">
+									<div class="col-md-4"><h4>${product.price}/-</h4></div>
+									<div class="add- to-cart-form">
+									<input type="hidden" class="pid" value="${product.id}">
+									<input type="hidden" class="pname" value="${product.item_name}">
+									<input type="hidden" class="pimage" value="./img/${product.item_image}">
+									<input type="hidden" class="pprice" value="${product.price}">
+									<input type="hidden" class="psize" value="${product.size}">
+									<div class="col-md-8 float-right"><button class="cart-btn ${product[locationStock] > 5 ? 'add-to-cart' : ''}">${product[locationStock] > 5 ? 'Add To Cart' : 'Out Of Stock'}</button></div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div> `;
+
+</script>

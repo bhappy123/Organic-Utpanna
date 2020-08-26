@@ -1,122 +1,34 @@
 <?php
-    // require('./PHPMailer/PHPMailerAutoload.php');
-
-    // $mail = new PHPMailer;
-
-    // $mail->Host = "smtp.gmail.com"; 
-
-    // $mail->isSMTP();
-    // $mail->Port = 587; 
-
-    // $mail->SMTPAuth = true;
-
-    // $mail->Username = "bikashranjandash0@gmail.com";
-
-    // $mail->Password = "bikash123";
-
-    // $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-    
-
-    // $mail->Subject = "Test Email";
-
-    // $mail->Body ="This is test Body...";
-
-    // $mail->setFrom('bikashranjandash0@gmail.com','Bikash');
-
-    // $mail->addAddress('bikashranjandash2@gmail.com');
+$to = 'bikashranjandash0@gmail.com';
+$subject = 'Order Successful';
+$from = 'orders@organicutpanna.in';
+ 
+// To send HTML mail, the Content-type header must be set
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
 
-    // if($mail->send()){
-    //     echo "mail sent";
-    // }
-    // else{
-    //     echo "err";
-    //     echo 'Mailer Error: ' . $mail->ErrorInfo;
-    // }
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>How to Send SMS</title>
+// Create email headers
+$headers .= 'From: '.$from."\r\n".
+    'Reply-To: '.$from."\r\n" .
+    'X-Mailer: PHP/' . phpversion();
+ 
+ 
+// Compose a simple HTML email message
+$message = '<html><body>';
+$message .= '<h1 style="color:#f40;">Hi Jane!</h1>';
+$message .= '<p style="color:#080;font-size:18px;">Will you marry me?</p>';
+$message .= '</body></html>';
+ 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-</head>
-<body class="bg-light" >
-        <div class="container mt-5">
-            <div class="row justify-content-md-center">
-                <div class="">
-                    <h3 class="text-center">Send SMS</h3>
-                </div>
-            </div>
-        </div>        
-    <div class="container mt-3">
-        <div class="row justify-content-md-center">
-            <div class="col-md-4">
-                <form method="POST" action="#">
-                  
-                  <label for="lblMobileNumber">Mobile Number</label>
-                  <input type="tel" name="userMobile" class="form-control" id="number" placeholder="919191919191"  required    pattern="[789][0-9]{9}" oninvalid="Please Enter Proper Mobile Number" >
-                  
-                  <label for="lblMessage">Message</label>
-                  <textarea class="form-control"  name="userMessage" required  id="textMessage" rows="3"  placeholder="Enter your message here" maxlength="158"></textarea>     
-
-                  <button type="submit" name="SubmitButton"class="btn btn-outline-primary mt-3" id="btnSend">Send</button>
-                  
-                  <button type="button" class="btn btn-outline-secondary mt-3 ml-3" onclick="clearAllFields()">Clear</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="container mt-5">
-            <div class="row justify-content-md-center">
-                <div class="col-md-4">
-                    <p id="response" class="text-center"></p>
-                </div>
-            </div>
-        </div>
-</body>
-<script type="text/javascript">
-
-function clearAllFields(){
-    number.value="";
-    textMessage.value="";
+if (mail($to, $subject, $message, $headers)){
+    echo "Mail sent successfull";
 }
-</script>
-</html>
+else{
+    echo "did not sent";
+}
 
-<?php 
-
-if(isset($_POST['SubmitButton']))
-{
-
-$textMessage=$_POST["userMessage"];
-$mobileNumber=$_POST["userMobile"];
-
-$apiKey = urlencode('OqCZYS4YHXI-RLNWp4Zj9ntCksrYNsuuWOQPIky9Z5');
-   
-   // Message details
-   $numbers = array($mobileNumber);
-   $sender = urlencode('TXTLCL');
-   $message = rawurlencode($textMessage);
-
-   $numbers = implode(',', $numbers);
-
-   // Prepare data for POST request
-   $data = array('apikey' => $apiKey, 'numbers' => $numbers, "sender" => $sender, "message" => $message);
-
-   // Send the POST request with cURL
-   $ch = curl_init('https://api.textlocal.in/send/');
-   curl_setopt($ch, CURLOPT_POST, true);
-   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-   $response = curl_exec($ch);
-   curl_close($ch);   
-   // Process your response here
-   echo $response;
-}    
 ?>
+
 

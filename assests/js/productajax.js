@@ -3,6 +3,7 @@ $(document).ready(function () {
 	function filter() {
 		var category= $("#category").val();
 		var locationFilter=$("#locationFilter").val();
+		
 		$.ajax({
 			type: "POST",
 			data: {
@@ -13,6 +14,7 @@ $(document).ready(function () {
 			success: function (response) {
 				let productsArr = JSON.parse(response);
 				let htmlString = ``;
+				let locationStock = locationFilter + '_stock';
 				productsArr.forEach((product) => {
 					htmlString += `
 					<div class="col-md-3 each-product-outside">
@@ -31,7 +33,7 @@ $(document).ready(function () {
 									<input type="hidden" class="pimage" value="./img/${product.item_image}">
 									<input type="hidden" class="pprice" value="${product.price}">
 									<input type="hidden" class="psize" value="${product.size}">
-									<div class="col-md-8 float-right"><button class="cart-btn ${product.availability === 'yes' || product.availability ==='' ? 'add-to-cart' : ''}">${product.availability === 'yes' || product.availability ==='' ? 'Add To Cart' : 'Out Of Stock'}</button></div>
+									<div class="col-md-8 float-right"><button class="cart-btn ${product[locationStock] > 5 ? 'add-to-cart' : ''}">${product[locationStock] > 5 ? 'Add To Cart' : 'Out Of Stock'}</button></div>
 									</div>
 								</div>
 							</div>
@@ -40,7 +42,7 @@ $(document).ready(function () {
 				});
 				$("#allProduct").html(htmlString);
 				$(".add-to-cart").click(function(e) {
-					
+
 					e.preventDefault();
 						var $form = $(this).closest(".add-to-cart-form");
 						var pid = $form.find(".pid").val();
@@ -72,7 +74,7 @@ $(document).ready(function () {
 								)
 								else{
 									$("#cart-message").html(
-										'<div class="success-alert alert alert-light text-danger"><div class="animation-ctn"><div class="icon icon--order-success svg"><svg xmlns="http://www.w3.org/2000/svg" width="154px" height="154px"><g fill="none" stroke="#F44812" stroke-width="2"><circle cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle><circle id="colored" fill="#F44812" cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle><polyline class="st0" stroke="#fff" stroke-width="10" points="43.5,77.8  112.2,77.8 " style="stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;"/></g></svg></div></div>'+response +
+										'<div class="success-alert alert alert-light text-danger"><div class="animation-ctn"><div class="icon icon--order-success svg"><svg xmlns="http://www.w3.org/2000/svg" width="154px" height="154px"><g fill="none" stroke="#F44812" stroke-width="2"><circle cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle><circle id="colored" fill="#F44812" cx="77" cy="77" r="72" style="stroke-dasharray:480px, 480px; stroke-dashoffset: 960px;"></circle><polyline class="st0" stroke="#fff" stroke-width="10" points="43.5,77.8  112.2,77.8 " style="stroke-dasharray:100px, 100px; stroke-dashoffset: 200px;"/></g></svg></div></div>'+response+
 											"</div>"
 									)
 								}
@@ -196,7 +198,11 @@ $(document).ready(function () {
 	location.href==="http://organicutpanna.in/" ||
 	location.href==="http://organicutpanna.in/index.php"||
 	location.href==="http://organicutpanna.in/#"||
-	location.href==="http://organicutpanna.in/index.php#"
+	location.href==="http://organicutpanna.in/index.php#" ||
+	location.href==="https://organicutpanna.in/" ||
+	location.href==="https://organicutpanna.in/index.php"||
+	location.href==="https://organicutpanna.in/#"||
+	location.href==="https://organicutpanna.in/index.php#"
 	) {    
   filter();
 }
@@ -235,8 +241,8 @@ $('#coupon').change(function (e) {
 		$('#shipping').html(shipping);
 		$('#fullPayment').html(discountPrice + shipping);
 		$('.coupon-alert').html('<p class="text-success">Coupon Applied</p>');
+		$('#couponOnlineApp').val('yes');
 		$('#couponApp').val('yes');
-
 	}
 	else{
 		$('#couponApp').val('no');
